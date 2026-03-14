@@ -1,0 +1,80 @@
+
+C:\Users\marin\Projet\ColocAI\src\pages\CalendarPage.tsx
+  34:5  error    Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\marin\Projet\ColocAI\src\pages\CalendarPage.tsx:34:5
+  32 |
+  33 |   useEffect(() => {
+> 34 |     loadData();
+     |     ^^^^^^^^ Avoid calling setState() directly within an effect
+  35 |     const sub = supabase.channel('events-changes')
+  36 |       .on('postgres_changes', { event: '*', schema: 'public', table: 'events' }, loadData)
+  37 |       .subscribe();  react-hooks/set-state-in-effect
+  39:6  warning  React Hook useEffect has a missing dependency: 'loadData'. Either include it or remove the dependency array                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              react-hooks/exhaustive-deps
+
+C:\Users\marin\Projet\ColocAI\src\pages\InventoryPage.tsx
+  85:72  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  93:55  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+C:\Users\marin\Projet\ColocAI\src\pages\SettingsPage.tsx
+  16:5  error  Error: Cannot access variable before it is declared
+
+`loadData` is accessed before it is declared, which prevents the earlier access from updating when this value changes over time.
+
+C:\Users\marin\Projet\ColocAI\src\pages\SettingsPage.tsx:16:5
+  14 |
+  15 |   useEffect(() => {
+> 16 |     loadData();
+     |     ^^^^^^^^ `loadData` accessed before it is declared
+  17 |   }, []);
+  18 |
+  19 |   const loadData = async () => {
+
+C:\Users\marin\Projet\ColocAI\src\pages\SettingsPage.tsx:19:3
+  17 |   }, []);
+  18 |
+> 19 |   const loadData = async () => {
+     |   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 20 |     const { data: t } = await supabase.from('tasks').select('*').order('name');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 21 |     if (t) setTasks(t);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 22 |
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 23 |     const { data: s } = await supabase.from('sos_items').select('*').order('name');
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 24 |     if (s) setSosItems(s);
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 25 |   };
+     | ^^^^^ `loadData` is declared here
+  26 |
+  27 |   const addTask = async (e: React.FormEvent) => {
+  28 |     e.preventDefault();  react-hooks/immutability
+
+C:\Users\marin\Projet\ColocAI\src\pages\ShoppingListPage.tsx
+   8:38  error  Unexpected any. Specify a different type                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              @typescript-eslint/no-explicit-any
+  25:5   error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+C:\Users\marin\Projet\ColocAI\src\pages\ShoppingListPage.tsx:25:5
+  23 |
+  24 |   useEffect(() => {
+> 25 |     loadList();
+     |     ^^^^^^^^ Avoid calling setState() directly within an effect
+  26 |     const sub = supabase.channel('shopping-changes')
+  27 |       .on('postgres_changes', { event: '*', schema: 'public', table: 'shopping_list' }, loadList)
+  28 |       .subscribe();  react-hooks/set-state-in-effect
+
+✖ 7 problems (6 errors, 1 warning)
+
